@@ -60,7 +60,7 @@ The classes are reasonably balanced (12–20% each), with no extreme minority cl
 
 ---
 
-## 3. The Two Core Problems (Set by Teacher)
+## 3. The Two Core Problems
 
 Our teacher flagged two specific technical problems we must solve and justify — these are the intellectual core of the project, not just implementation details.
 
