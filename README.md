@@ -11,16 +11,56 @@ This project builds a deep learning system that reads full-length commercial con
 **Dataset:** [CUAD v1](https://huggingface.co/datasets/theatticusproject/cuad/tree/main/CUAD_v1) — 510 contracts, expert-annotated by The Atticus Project
 
 **Target Clause Classes (6):**
-1. Termination
-2. Indemnification
-3. Limitation of Liability
-4. Confidentiality
-5. Change of Control
+1. Cap on Liability
+2. Non-Compete
+3. License Grant
+4. Audit Rights
+5. Termination for Convenience
 6. Insurance
 
 ---
 
-## 2. The Two Core Problems 
+## 2. Dataset Statistical Analysis
+
+CUAD v1 contains **510 commercial contracts** and **41 officially annotated clause categories**. For our document-length analysis, we used the available `full_contract_txt` subset containing **200 contract documents**.
+
+### Document Statistics
+
+| Statistic | Value |
+|---|---|
+| Total CUAD v1 contracts | 510 |
+| Documents analyzed in text subset | 200 |
+| Average words per document | 8,310.2 |
+| Average lines per document | 419.77 |
+| Average non-empty lines per document | 161.56 |
+| Minimum words per document | 114 |
+| Maximum words per document | 47,629 |
+
+The average line count is based on the line structure of the provided TXT files. Because the files contain formatting and blank lines, the average number of non-empty lines is also reported.
+
+**Why this matters for the project:** an average document of ~8,300 words (roughly 11,000+ tokens) is already far beyond BERT's 512-token limit, and the maximum document (47,629 words) is nearly 90x that limit. This is direct, dataset-level evidence backing **Problem 2** — it justifies why a long-context architecture (Longformer) and/or chunking strategy is necessary rather than optional for this project.
+
+### Selected Clause Distribution
+
+For the six selected CUAD categories, the dataset contains **1,353 selected clause occurrences**:
+
+| Clause Class | Number of Clauses | Percentage |
+|---|---|---|
+| Cap on Liability | 275 | 20.33% |
+| Non-Compete | 257 | 18.99% |
+| License Grant | 257 | 18.99% |
+| Audit Rights | 214 | 15.82% |
+| Termination for Convenience | 183 | 13.53% |
+| Insurance | 167 | 12.34% |
+| **Total** | **1,353** | **100%** |
+
+![Distribution of Selected CUAD v1 Contract Clause Classes](clause_distribution_chart.png)
+
+The classes are reasonably balanced (12–20% each), with no extreme minority class — this simplifies the class-imbalance handling in Person B/C's training pipeline compared to using all 41 CUAD labels (where some clause types have very few examples).
+
+---
+
+## 3. The Two Core Problems (Set by Teacher)
 
 Our teacher flagged two specific technical problems we must solve and justify — these are the intellectual core of the project, not just implementation details.
 
@@ -60,7 +100,7 @@ These two problems together form the **novelty and technical backbone** of the p
 
 ---
 
-## 3. Team Task Split (4 People)
+## 4. Team Task Split (4 People)
 
 Work is split by pipeline stage so each person owns a clear deliverable, but all four should sit in on the Problem 1 / Problem 2 experiment design together since that's the shared intellectual core.
 
@@ -101,7 +141,7 @@ Work is split by pipeline stage so each person owns a clear deliverable, but all
 
 ---
 
-## 4. Suggested Timeline
+## 5. Suggested Timeline
 
 | Week | Milestone |
 |---|---|
@@ -113,7 +153,7 @@ Work is split by pipeline stage so each person owns a clear deliverable, but all
 
 ---
 
-## 5. Tech Stack
+## 6. Tech Stack
 
 - **Language:** Python
 - **Framework:** PyTorch + HuggingFace Transformers
@@ -124,7 +164,7 @@ Work is split by pipeline stage so each person owns a clear deliverable, but all
 
 ---
 
-## 6. Key Deliverables Summary
+## 7. Key Deliverables Summary
 
 1. ✅ Cleaned, chunked CUAD dataset (6 clause classes)
 2. ✅ Embedding comparison: BERT vs Legal-BERT (**answers Problem 1**)
