@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "legal-risk-clause-classifier"
+version = "0.1.0"
+description = "Multi-label legal clause risk classifier for CUAD contracts"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "torch>=2.2",
+  "transformers>=4.44",
+  "datasets>=2.20",
+  "pandas>=2.2",
+  "numpy>=1.26",
+  "tqdm>=4.66",
+]
+
+[project.scripts]
+legal-risk-prepare = "legal_risk_classifier.prepare:main"
+legal-risk-train = "legal_risk_classifier.train:main"
+legal-risk-eval = "legal_risk_classifier.evaluate:main"
+legal-risk-infer = "legal_risk_classifier.infer:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
