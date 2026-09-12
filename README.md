@@ -103,5 +103,5 @@ legal-risk-eval --model_dir outputs/legal_bert/best_model --rows_jsonl data/cuad
 
 **Not required right now (optional)**
 - `HUGGINGFACE_HUB_TOKEN` only if you use private/gated Hugging Face models
-- `OPENAI_API_KEY` only if you later add OpenAI-based features
+- `GROQ_API_KEY` only if you later add Groq-based LLM features
 - `SENTRY_DSN` only if you add Sentry monitoring
