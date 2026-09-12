@@ -9,3 +9,6 @@ dist/
 outputs/
 checkpoints/
 data/
+apps/web/node_modules/
+apps/web/.next/
+.env

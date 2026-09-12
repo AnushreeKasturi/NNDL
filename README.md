@@ -1,121 +1,107 @@
-# Legal Clause Risk Classifier (CUAD, 6 Labels)
+# NNDL Legal Risk Classifier (Production Starter)
 
-This repo is a runnable template for the attached project: multi-label classification of high-risk commercial contract clauses using BERT / Legal-BERT / Longformer with long-document chunking.
+This repository now includes a **production-oriented full application scaffold** for legal clause risk detection:
 
-## Target labels
+- **Backend API:** FastAPI + PostgreSQL + JWT auth
+- **Async inference:** Redis + RQ worker
+- **Frontend:** Next.js (TypeScript)
+- **ML core:** Existing BERT / Legal-BERT / Longformer classifier pipeline
+- **Deployment:** Docker Compose for cloud/on-prem parity
 
-1. Cap on Liability
-2. Non-Compete
-3. License Grant
-4. Audit Rights
-5. Termination for Convenience
-6. Insurance
+License: [MIT](./LICENSE)
 
-## What is implemented
-
-- CUAD JSON preprocessing into training rows (`doc_id`, `text`, `labels[]`)
-- Sliding-window chunking for long contracts (`max_length`, `stride`)
-- Multi-label sequence classification (`sigmoid + BCE`) with:
-  - `bert-base-uncased`
-  - `nlpaueb/legal-bert-base-uncased`
-  - `allenai/longformer-base-4096`
-- Document-level split to reduce leakage
-- Per-class + macro precision/recall/F1
-- Document inference with chunk max-pooling
-
-## Project layout
+## Architecture
 
 ```text
+apps/
+  api/
+    app/
+      main.py
+      routes/          # auth, contracts, jobs, health
+      services/        # queue + classifier runtime
+      models.py        # users/contracts/inference_jobs
+      schemas.py
+      security.py
+      tasks.py         # async job execution
+    Dockerfile
+    requirements.txt
+  web/
+    app/               # Next.js UI
+    lib/api.ts
+    Dockerfile
 src/legal_risk_classifier/
-  labels.py       # label space + label normalization
-  data.py         # CUAD parsing, chunking, dataset, splits
-  models.py       # model registry + HF model construction
-  metrics.py      # multi-label metrics
-  prepare.py      # CUAD JSON -> JSONL
-  train.py        # training entrypoint
-  evaluate.py     # standalone evaluation entrypoint
-  infer.py        # document prediction entrypoint
+  ...                  # training/evaluation/inference pipeline
+docker-compose.yml
+.env.example
 ```
 
-## Setup
+## Quick start (full app)
+
+1. Create env file:
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-pip install -e .
+cp .env.example .env
 ```
 
-## 1. Prepare data
-
-Convert `CUAD_v1.json` into row-level JSONL:
+2. Start all services:
 
 ```bash
-legal-risk-prepare \
-  --cuad_json /path/to/CUAD_v1.json \
-  --output_jsonl data/cuad_rows.jsonl
+docker compose up --build
 ```
 
-To keep only rows with at least one of the 6 labels:
+3. Open:
+
+- Web: http://localhost:3000
+- API docs: http://localhost:8000/docs
+
+## API summary
+
+- `POST /auth/register`
+- `POST /auth/login`
+- `POST /contracts` (JWT required)
+- `GET /contracts` (JWT required)
+- `POST /contracts/{contract_id}/analyze` (JWT required, async queue)
+- `GET /jobs`
+- `GET /jobs/{job_id}`
+
+## A-Z working documentation
+
+See [docs/a-z](./docs/a-z/README.md) for detailed flow-wise READMEs:
+- web page flow
+- API flow
+- model inference flow
+- queue/worker flow
+- data/training flow
+- deployment flow
+- security/auth flow
+
+## Training pipeline (model development)
+
+The research/training tools are still available:
 
 ```bash
-legal-risk-prepare \
-  --cuad_json /path/to/CUAD_v1.json \
-  --output_jsonl data/cuad_rows_labeled_only.jsonl \
-  --drop_unlabeled
+legal-risk-prepare --cuad_json /path/to/CUAD_v1.json --output_jsonl data/cuad_rows.jsonl
+legal-risk-train --rows_jsonl data/cuad_rows.jsonl --model legal-bert --output_dir outputs/legal_bert
+legal-risk-eval --model_dir outputs/legal_bert/best_model --rows_jsonl data/cuad_rows.jsonl
 ```
 
-## 2. Train
+## Production notes
 
-Legal-BERT baseline:
+- Set a strong `JWT_SECRET_KEY` in `.env`.
+- For real deployments, replace local volumes with managed Postgres/Redis.
+- Add TLS termination and API rate limiting at ingress.
+- Integrate object storage and encrypted-at-rest retention for contract documents.
 
-```bash
-legal-risk-train \
-  --rows_jsonl data/cuad_rows.jsonl \
-  --model legal-bert \
-  --output_dir outputs/legal_bert \
-  --max_length 512 \
-  --stride 64 \
-  --epochs 3 \
-  --batch_size 8
-```
+## Environment variables and API keys
 
-Longformer long-context run:
+`cp .env.example .env` gives you all variables.
 
-```bash
-legal-risk-train \
-  --rows_jsonl data/cuad_rows.jsonl \
-  --model longformer \
-  --output_dir outputs/longformer \
-  --max_length 4096 \
-  --stride 512 \
-  --epochs 3 \
-  --batch_size 1
-```
+**Required for this codebase right now**
+- `JWT_SECRET_KEY` (you generate this; no provider key to fetch)
+- `DATABASE_URL` (your PostgreSQL connection)
+- `REDIS_URL` (your Redis connection)
 
-## 3. Evaluate
-
-```bash
-legal-risk-eval \
-  --model_dir outputs/legal_bert/best_model \
-  --rows_jsonl data/cuad_rows.jsonl \
-  --max_length 512 \
-  --stride 64
-```
-
-## 4. Inference (single contract text file)
-
-```bash
-legal-risk-infer \
-  --model_dir outputs/legal_bert/best_model \
-  --text_file /path/to/contract.txt \
-  --max_length 512 \
-  --stride 64 \
-  --threshold 0.5
-```
-
-## Experiment mapping to your project
-
-- **Problem 1 (Embedding):** run `--model bert` vs `--model legal-bert` and compare macro/per-class F1.
-- **Problem 2 (Long docs):** run `--model legal-bert --max_length 512` vs `--model longformer --max_length 4096 --stride 512`.
-
+**Not required right now (optional)**
+- `HUGGINGFACE_HUB_TOKEN` only if you use private/gated Hugging Face models
+- `OPENAI_API_KEY` only if you later add OpenAI-based features
+- `SENTRY_DSN` only if you add Sentry monitoring

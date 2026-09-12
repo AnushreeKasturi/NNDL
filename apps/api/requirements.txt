@@ -1,0 +1,13 @@
+fastapi>=0.115
+uvicorn[standard]>=0.30
+sqlalchemy>=2.0
+psycopg2-binary>=2.9
+pydantic-settings>=2.4
+email-validator>=2.2
+python-jose[cryptography]>=3.3
+passlib[bcrypt]>=1.7
+rq>=1.16
+redis>=5.0
+torch>=2.2
+transformers>=4.44
+numpy>=1.26
