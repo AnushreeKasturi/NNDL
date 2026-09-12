@@ -1,0 +1,6 @@
+torch>=2.2
+transformers>=4.44
+datasets>=2.20
+pandas>=2.2
+numpy>=1.26
+tqdm>=4.66
