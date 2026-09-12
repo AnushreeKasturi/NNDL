@@ -1,4 +1,4 @@
-# NNDL Legal Risk Classifier (Production Starter)
+# NNDL Legal Risk Classifier
 
 This repository now includes a **production-oriented full application scaffold** for legal clause risk detection:
 
