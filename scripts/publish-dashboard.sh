@@ -9,9 +9,11 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 RUN_DIR="${1:-outputs/cnn}"
 REMOTE="${REMOTE:-origin}"
+# Respect a virtualenv; "python" is often absent on macOS.
+PYTHON="${PYTHON:-$([ -x .venv/bin/python ] && echo .venv/bin/python || echo python3)}"
 
 echo "building from $RUN_DIR"
-python -m legal_risk_classifier.export_dashboard --run_dir "$RUN_DIR"
+"$PYTHON" -m legal_risk_classifier.export_dashboard --run_dir "$RUN_DIR"
 
 blob=$(git hash-object -w dashboard/index.html)
 empty=$(printf '' | git hash-object -w --stdin)
