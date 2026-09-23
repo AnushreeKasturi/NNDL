@@ -156,6 +156,19 @@ label windows which do not contain it, that mean pooling buries a true positive,
 that BERT and Legal-BERT differ only in checkpoint, and that metrics expose an
 all-negative model which accuracy would rate above 95%.
 
+## Deployment
+
+The results dashboard is a static page published to GitHub Pages, regenerated
+from whatever runs exist:
+
+```bash
+./scripts/publish-dashboard.sh outputs/cnn
+```
+
+The demo is a HuggingFace Space holding a checkpoint and a six-line entry point
+that installs the model code from this repository, so it cannot drift from the
+pipeline the results were measured on. See [deploy/](./deploy/README.md).
+
 ## Demo
 
 ```bash
