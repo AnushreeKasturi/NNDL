@@ -158,11 +158,12 @@ all-negative model which accuracy would rate above 95%.
 
 ## Deployment
 
-The results dashboard is a static page published to GitHub Pages, regenerated
-from whatever runs exist:
+The results dashboard is a static page published as a Hugging Face Space,
+regenerated from whatever runs exist:
 
 ```bash
-./scripts/publish-dashboard.sh outputs/cnn
+python -m legal_risk_classifier.export_dashboard \
+    --run_dir outputs/cnn --repo_id <username>/clause-risk-review --push
 ```
 
 The demo is a HuggingFace Space holding a checkpoint and a six-line entry point

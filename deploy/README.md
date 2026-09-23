@@ -3,25 +3,32 @@
 Two surfaces, deployed separately because they have different needs: the
 dashboard is a static file, the demo needs a Python process holding a model.
 
-## Dashboard — GitHub Pages
-
-The page is generated from the current runs, so publishing means regenerating
-and replacing one file:
+## Dashboard — Hugging Face Space (static)
 
 ```bash
-./scripts/publish-dashboard.sh outputs/cnn
+pip install -e ".[hub,analysis]"
+huggingface-cli login
+
+python -m legal_risk_classifier.export_dashboard \
+    --run_dir outputs/cnn --repo_id <your-username>/clause-risk-review --push
 ```
 
-It builds the `gh-pages` branch with git plumbing rather than checking it out,
-so it is safe to run from a dirty working tree.
+Rerun it after any training run; the page is generated, so the published
+dashboard picks up the new numbers with nothing edited by hand.
 
-**One-time setup** (needs repository admin): Settings → Pages → Source:
-*Deploy from a branch* → Branch: `gh-pages`, folder `/ (root)` → Save.
+### Why not GitHub Pages
 
-Live at https://www.algorithmicbit.tech/NNDL/ within a minute of saving.
+GitHub Pages was tried first and is the wrong tool here. A custom domain
+attached to a user-level Pages site makes *every* project repository serve as a
+subpath of that domain, so enabling Pages on this repository published the
+project under a personal portfolio. There is no per-repository way to opt out of
+the domain while keeping Pages.
 
-Rerun the script after any new training run and the published page picks up the
-new numbers. Nothing is edited by hand.
+A static Space avoids that entirely: its own URL, no relationship to any other
+site, free, and it uses the same account as the model and the demo.
+
+If Pages was ever enabled on this repository, turn it off under
+Settings -> Pages -> Source: None. The REST API refuses to deactivate it.
 
 ## Demo — HuggingFace Spaces
 
