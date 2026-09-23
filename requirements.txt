@@ -1,6 +1,2 @@
-torch>=2.2
-transformers>=4.44
-datasets>=2.20
-pandas>=2.2
-numpy>=1.26
-tqdm>=4.66
+# Data preparation uses the standard library only.
+# Model dependencies are added alongside the models.

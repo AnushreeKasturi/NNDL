@@ -1,39 +1,31 @@
+"""The six risk-relevant clause categories this project classifies.
+
+CUAD annotates 41 categories. We keep six, chosen for being commercially
+material and reasonably well represented in the corpus. The mapping below is
+the authoritative link between our display names and the category names CUAD
+uses in its question ids.
+"""
+
 from __future__ import annotations
 
-TARGET_LABELS = [
-    "Cap on Liability",
-    "Non-Compete",
-    "License Grant",
-    "Audit Rights",
-    "Termination for Convenience",
-    "Insurance",
-]
-
-_NORMALIZED_LOOKUP = {
-    "cap on liability": "Cap on Liability",
-    "cap-on-liability": "Cap on Liability",
-    "liability cap": "Cap on Liability",
-    "non-compete": "Non-Compete",
-    "non compete": "Non-Compete",
-    "no-solicit of employees": "Non-Compete",
-    "license grant": "License Grant",
-    "license-grant": "License Grant",
-    "audit rights": "Audit Rights",
-    "audit-rights": "Audit Rights",
-    "termination for convenience": "Termination for Convenience",
-    "termination-for-convenience": "Termination for Convenience",
-    "insurance": "Insurance",
+# Display name -> the category string CUAD uses after the "__" in a question id.
+TARGET_LABELS: dict[str, str] = {
+    "Cap on Liability": "Cap On Liability",
+    "Non-Compete": "Non-Compete",
+    "License Grant": "License Grant",
+    "Audit Rights": "Audit Rights",
+    "Termination for Convenience": "Termination For Convenience",
+    "Insurance": "Insurance",
 }
 
-LABEL_TO_INDEX = {label: i for i, label in enumerate(TARGET_LABELS)}
+LABEL_NAMES: tuple[str, ...] = tuple(TARGET_LABELS)
+LABEL_TO_INDEX: dict[str, int] = {name: i for i, name in enumerate(LABEL_NAMES)}
+NUM_LABELS = len(LABEL_NAMES)
+
+# Reverse direction, for reading CUAD.
+_CUAD_TO_LABEL: dict[str, str] = {v: k for k, v in TARGET_LABELS.items()}
 
 
-def normalize_label(raw: str) -> str | None:
-    key = " ".join(raw.strip().lower().replace("_", " ").replace("/", " ").split())
-    if key in _NORMALIZED_LOOKUP:
-        return _NORMALIZED_LOOKUP[key]
-    for candidate in TARGET_LABELS:
-        if key == candidate.lower():
-            return candidate
-    return None
-
+def label_for_cuad_category(category: str) -> str | None:
+    """Map a CUAD category name onto one of our six labels, or None."""
+    return _CUAD_TO_LABEL.get(category.strip())
