@@ -76,24 +76,36 @@ def _rebuild(run_dir: Path):
     return model, summary, chunking, ("hf", load_tokenizer(spec))
 
 
-def main() -> None:
-    args = parse_args()
-    model, summary, chunking, (kind, encoder) = _rebuild(args.run_dir)
-
-    documents = select(load_documents(args.documents), load_splits(args.splits), args.split)
+def _score_split(model, kind, encoder, chunking, documents, assignment, split, batch_size, device):
+    """Chunk one split and run the model over every chunk in it."""
     chunks = chunk_documents(
-        documents, window=chunking["window"], overlap=chunking["overlap"]
+        select(documents, assignment, split),
+        window=chunking["window"],
+        overlap=chunking["overlap"],
     )
     dataset = (
         WordChunkDataset(chunks, encoder, max_tokens=chunking["max_tokens"])
         if kind == "cnn"
         else TokenizedChunkDataset(chunks, encoder, max_length=chunking["max_length"])
     )
-    loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=False)
+    loader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
+    y_true, y_prob = predict(model, loader, device)
+    return chunks, y_true, y_prob
 
+
+def main() -> None:
+    args = parse_args()
+    model, summary, chunking, (kind, encoder) = _rebuild(args.run_dir)
+
+    documents = load_documents(args.documents)
+    assignment = load_splits(args.splits)
     device = resolve_device(args.device)
     model.to(device)
-    y_true, y_prob = predict(model, loader, device)
+
+    chunks, y_true, y_prob = _score_split(
+        model, kind, encoder, chunking, documents, assignment,
+        args.split, args.batch_size, device,
+    )
 
     # training.json is written by the shared loop for every model, so it is the
     # one place validation-tuned thresholds are guaranteed to be found. Falling
@@ -108,10 +120,22 @@ def main() -> None:
     chunk_metrics = compute_metrics(y_true, y_prob, thresholds=thresholds)
 
     doc_ids, doc_true, doc_prob = pool_to_documents(chunks, y_prob, method=args.pooling)
-    # Document-level thresholds are their own operating point: a pooled max is
-    # systematically higher than a chunk probability, so reusing the chunk
-    # thresholds would over-predict.
-    doc_thresholds = tune_thresholds(doc_true, doc_prob)
+
+    # Document-level thresholds are their own operating point, because a pooled
+    # maximum is systematically higher than any single chunk probability. They
+    # are tuned on validation and applied here: tuning them on the split being
+    # scored would fit the decision boundary to the test set and report a
+    # number nobody could reproduce on new contracts.
+    if args.split == "val":
+        doc_thresholds = tune_thresholds(doc_true, doc_prob)
+    else:
+        val_chunks, _, val_prob = _score_split(
+            model, kind, encoder, chunking, documents, assignment,
+            "val", args.batch_size, device,
+        )
+        _, val_true, val_pooled = pool_to_documents(val_chunks, val_prob, method=args.pooling)
+        doc_thresholds = tune_thresholds(val_true, val_pooled)
+
     document_metrics = compute_metrics(doc_true, doc_prob, thresholds=doc_thresholds)
 
     result = {
@@ -120,6 +144,7 @@ def main() -> None:
         "split": args.split,
         "pooling": args.pooling,
         "counts": {"documents": len(doc_ids), "chunks": len(chunks)},
+        "document_thresholds_tuned_on": "val" if args.split != "val" else "val (self)",
         "chunk_level": chunk_metrics,
         "document_level": document_metrics,
     }
