@@ -32,6 +32,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--template", type=Path, default=Path("dashboard/template.html"))
     parser.add_argument("--html", type=Path, default=Path("dashboard/index.html"))
     parser.add_argument("--examples", type=int, default=10, help="contracts to embed")
+    parser.add_argument("--repo_id", type=str, default=None, help="HF Space, e.g. user/name")
+    parser.add_argument("--push", action="store_true", help="upload to a Hugging Face Space")
+    parser.add_argument("--private", action="store_true")
     return parser.parse_args()
 
 
@@ -167,6 +170,34 @@ def build_payload(
     }
 
 
+def _push_space(html: Path, repo_id: str | None, private: bool) -> None:
+    """Upload the page as a Hugging Face static Space.
+
+    A Space is used rather than GitHub Pages because a user-level custom domain
+    makes every GitHub project page a subpath of that domain, which is not
+    where a course project belongs.
+    """
+    if not repo_id:
+        raise SystemExit("--push needs --repo_id, e.g. --repo_id your-name/clause-risk-review")
+
+    import shutil
+    import tempfile
+
+    from huggingface_hub import HfApi
+
+    card = Path(__file__).resolve().parents[2] / "deploy" / "dashboard" / "README.md"
+    with tempfile.TemporaryDirectory() as staging:
+        staged = Path(staging)
+        shutil.copy2(html, staged / "index.html")
+        if card.exists():
+            shutil.copy2(card, staged / "README.md")
+
+        api = HfApi()
+        api.create_repo(repo_id, repo_type="space", space_sdk="static", private=private, exist_ok=True)
+        api.upload_folder(folder_path=str(staged), repo_id=repo_id, repo_type="space")
+    print(f"published -> https://huggingface.co/spaces/{repo_id}")
+
+
 def main() -> None:
     args = parse_args()
     documents = load_documents(args.documents)
@@ -189,6 +220,9 @@ def main() -> None:
         page = args.template.read_text(encoding="utf-8").replace("/*DATA*/", serialised)
         args.html.write_text(page, encoding="utf-8")
         print(f"page {args.html.stat().st_size / 1024:,.0f} KB -> {args.html}")
+
+    if args.push:
+        _push_space(args.html, args.repo_id, args.private)
     for example in payload["examples"]:
         prediction = example["prediction"]
         print(
