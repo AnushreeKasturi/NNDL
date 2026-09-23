@@ -31,6 +31,7 @@ legal-risk-train-transformer = "legal_risk_classifier.train_transformer:main"
 legal-risk-evaluate = "legal_risk_classifier.evaluate:main"
 legal-risk-compare = "legal_risk_classifier.compare:main"
 legal-risk-demo = "legal_risk_classifier.demo:main"
+legal-risk-export-dashboard = "legal_risk_classifier.export_dashboard:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
