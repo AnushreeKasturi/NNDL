@@ -18,7 +18,7 @@ so it is safe to run from a dirty working tree.
 **One-time setup** (needs repository admin): Settings → Pages → Source:
 *Deploy from a branch* → Branch: `gh-pages`, folder `/ (root)` → Save.
 
-Live at https://anushreekasturi.github.io/NNDL/ within a minute of saving.
+Live at https://www.algorithmicbit.tech/NNDL/ within a minute of saving.
 
 Rerun the script after any new training run and the published page picks up the
 new numbers. Nothing is edited by hand.
