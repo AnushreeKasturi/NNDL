@@ -7,7 +7,7 @@ dashboard is a static file, the demo needs a Python process holding a model.
 
 ```bash
 pip install -e ".[hub,analysis]"
-huggingface-cli login
+hf auth login
 
 python -m legal_risk_classifier.export_dashboard \
     --run_dir outputs/cnn --repo_id <your-username>/clause-risk-review --push
@@ -38,9 +38,9 @@ results were measured on.
 
 ```bash
 pip install huggingface_hub
-huggingface-cli login                      # needs a token with write access
+hf auth login                              # needs a token with write access
 
-huggingface-cli repo create nndl-clause-risk --type space --space_sdk gradio
+hf repo create nndl-clause-risk --repo-type space --space_sdk gradio
 git clone https://huggingface.co/spaces/<your-username>/nndl-clause-risk
 cd nndl-clause-risk
 
@@ -71,7 +71,7 @@ carrying that run's real numbers, its per-label thresholds and its limitations.
 
 ```bash
 pip install -e ".[hub]"
-huggingface-cli login                      # a token with write access
+hf auth login                              # a token with write access
 
 legal-risk-export-hf --run_dir outputs/legal_bert \
     --repo_id <your-username>/cuad-clause-risk-legal-bert --push
