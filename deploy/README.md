@@ -52,6 +52,38 @@ To deploy a transformer instead, point `run/` at that run directory — but a
 fine-tuned BERT checkpoint is roughly 440 MB, and a free CPU Space will be slow
 enough to notice.
 
+## Model — Hugging Face Hub
+
+A training run saves what the training loop needs, which is not what a stranger
+needs: the transformer checkpoints are wrapper state dicts with `backbone.`
+prefixed keys, so uploading one unchanged hands people a file they cannot load.
+
+`legal-risk-export-hf` converts a run into the standard layout, names the six
+outputs in the config so the model is self-describing, and writes a model card
+carrying that run's real numbers, its per-label thresholds and its limitations.
+
+```bash
+pip install -e ".[hub]"
+huggingface-cli login                      # a token with write access
+
+legal-risk-export-hf --run_dir outputs/legal_bert \
+    --repo_id <your-username>/cuad-clause-risk-legal-bert --push
+```
+
+Leave `--push` off to inspect `outputs/<run>/hf` first.
+
+A transformer exported this way loads with plain `transformers`, no repository
+required, and reproduces the training wrapper exactly:
+
+```python
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
+model = AutoModelForSequenceClassification.from_pretrained(name)
+model.config.id2label      # {0: 'Cap on Liability', 1: 'Non-Compete', ...}
+```
+
+The TextCNN is not a transformers architecture, so its card says so and points
+at `CNNRuntime` rather than promising a `from_pretrained` that would fail.
+
 ## Why not one deployment for both
 
 A static page costs nothing to host and never sleeps. A Space holding a model
