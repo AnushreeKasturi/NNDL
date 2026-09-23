@@ -20,6 +20,8 @@ dependencies = [
 [project.optional-dependencies]
 # Only the dataset report needs a plotting library.
 analysis = ["matplotlib>=3.8"]
+# The browser demo. Not needed to train, evaluate or report.
+demo = ["gradio>=4.44"]
 
 [project.scripts]
 legal-risk-prepare = "legal_risk_classifier.prepare:main"
@@ -28,6 +30,7 @@ legal-risk-train-cnn = "legal_risk_classifier.train_cnn:main"
 legal-risk-train-transformer = "legal_risk_classifier.train_transformer:main"
 legal-risk-evaluate = "legal_risk_classifier.evaluate:main"
 legal-risk-compare = "legal_risk_classifier.compare:main"
+legal-risk-demo = "legal_risk_classifier.demo:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
