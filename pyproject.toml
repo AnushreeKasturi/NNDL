@@ -12,6 +12,7 @@ requires-python = ">=3.10"
 # tests/test_data_pipeline.py run without any of these installed.
 dependencies = [
   "torch>=2.2",
+  "transformers>=4.44",
   "numpy>=1.26",
   "scikit-learn>=1.4",
 ]
@@ -24,6 +25,7 @@ analysis = ["matplotlib>=3.8"]
 legal-risk-prepare = "legal_risk_classifier.prepare:main"
 legal-risk-analyze = "legal_risk_classifier.analyze:main"
 legal-risk-train-cnn = "legal_risk_classifier.train_cnn:main"
+legal-risk-train-transformer = "legal_risk_classifier.train_transformer:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
