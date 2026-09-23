@@ -110,12 +110,13 @@ def main() -> None:
     y_true, y_prob = predict(model, loaders["test"], device)
     summary = {
         "model": "textcnn",
-        "chunking": {"window": args.window, "overlap": args.overlap},
+        "chunking": {"window": args.window, "overlap": args.overlap, "max_tokens": args.max_tokens},
         "chunks": {split: len(chunks) for split, chunks in chunked.items()},
         "vocab_size": len(vocab),
         "pos_weight": None if pos_weight is None else pos_weight.tolist(),
         "best_epoch": result.best_epoch,
         "best_val_macro_f1": result.best_val_macro_f1,
+        "thresholds": result.thresholds,
         "test_at_0.5": compute_metrics(y_true, y_prob, thresholds=0.5),
         "test_at_tuned_thresholds": compute_metrics(y_true, y_prob, thresholds=result.thresholds),
     }

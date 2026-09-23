@@ -26,6 +26,8 @@ legal-risk-prepare = "legal_risk_classifier.prepare:main"
 legal-risk-analyze = "legal_risk_classifier.analyze:main"
 legal-risk-train-cnn = "legal_risk_classifier.train_cnn:main"
 legal-risk-train-transformer = "legal_risk_classifier.train_transformer:main"
+legal-risk-evaluate = "legal_risk_classifier.evaluate:main"
+legal-risk-compare = "legal_risk_classifier.compare:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
