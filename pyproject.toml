@@ -12,8 +12,13 @@ requires-python = ">=3.10"
 # its tests needs no install. Model dependencies arrive with the models.
 dependencies = []
 
+[project.optional-dependencies]
+# Only the dataset report needs a plotting library.
+analysis = ["matplotlib>=3.8"]
+
 [project.scripts]
 legal-risk-prepare = "legal_risk_classifier.prepare:main"
+legal-risk-analyze = "legal_risk_classifier.analyze:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

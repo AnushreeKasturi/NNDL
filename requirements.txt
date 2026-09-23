@@ -1,2 +1,3 @@
-# Data preparation uses the standard library only.
+# Data preparation and its tests use the standard library only.
 # Model dependencies are added alongside the models.
+matplotlib>=3.8  # dataset report figures

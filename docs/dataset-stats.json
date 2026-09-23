@@ -1,0 +1,252 @@
+{
+  "document_lengths": {
+    "documents": 510,
+    "words": {
+      "min": 109.0,
+      "p25": 2452.0,
+      "median": 5039.0,
+      "mean": 7861.1882352941175,
+      "p75": 10211.0,
+      "p95": 25298.0,
+      "max": 47733.0
+    },
+    "estimated_tokens": {
+      "min": 158.04999999999998,
+      "p25": 3555.4,
+      "median": 7306.55,
+      "mean": 11398.722941176471,
+      "p75": 14805.949999999999,
+      "p95": 36682.1,
+      "max": 69212.84999999999
+    },
+    "exceeding_bert_512": 493,
+    "exceeding_longformer_4096": 358
+  },
+  "document_labels": {
+    "Cap on Liability": {
+      "documents": 275,
+      "document_rate": 0.5392156862745098,
+      "spans": 662
+    },
+    "Non-Compete": {
+      "documents": 119,
+      "document_rate": 0.23333333333333334,
+      "spans": 251
+    },
+    "License Grant": {
+      "documents": 255,
+      "document_rate": 0.5,
+      "spans": 772
+    },
+    "Audit Rights": {
+      "documents": 214,
+      "document_rate": 0.4196078431372549,
+      "spans": 639
+    },
+    "Termination for Convenience": {
+      "documents": 183,
+      "document_rate": 0.3588235294117647,
+      "spans": 245
+    },
+    "Insurance": {
+      "documents": 166,
+      "document_rate": 0.3254901960784314,
+      "spans": 554
+    }
+  },
+  "span_lengths": {
+    "Cap on Liability": {
+      "spans": 662,
+      "min": 5.0,
+      "p25": 32.0,
+      "median": 49.0,
+      "mean": 59.30513595166163,
+      "p75": 75.0,
+      "p95": 138.0,
+      "max": 299.0
+    },
+    "Non-Compete": {
+      "spans": 251,
+      "min": 2.0,
+      "p25": 32.0,
+      "median": 49.0,
+      "mean": 61.40239043824701,
+      "p75": 75.0,
+      "p95": 170.0,
+      "max": 479.0
+    },
+    "License Grant": {
+      "spans": 772,
+      "min": 1.0,
+      "p25": 37.0,
+      "median": 54.0,
+      "mean": 64.71761658031087,
+      "p75": 82.0,
+      "p95": 147.0,
+      "max": 394.0
+    },
+    "Audit Rights": {
+      "spans": 639,
+      "min": 1.0,
+      "p25": 27.0,
+      "median": 40.0,
+      "mean": 48.13458528951487,
+      "p75": 60.0,
+      "p95": 110.0,
+      "max": 288.0
+    },
+    "Termination for Convenience": {
+      "spans": 245,
+      "min": 4.0,
+      "p25": 18.0,
+      "median": 27.0,
+      "mean": 36.13469387755102,
+      "p75": 40.0,
+      "p95": 95.0,
+      "max": 333.0
+    },
+    "Insurance": {
+      "spans": 554,
+      "min": 2.0,
+      "p25": 22.0,
+      "median": 37.0,
+      "mean": 48.227436823104696,
+      "p75": 56.0,
+      "p95": 115.0,
+      "max": 350.0
+    }
+  },
+  "chunk_labels": {
+    "window": 300,
+    "overlap": 100,
+    "chunks": 20048,
+    "unlabelled_chunks": 17037,
+    "unlabelled_rate": 0.8498104549082203,
+    "per_label": {
+      "Cap on Liability": {
+        "positive_chunks": 716,
+        "positive_rate": 0.03571428571428571,
+        "pos_weight": 27.0
+      },
+      "Non-Compete": {
+        "positive_chunks": 301,
+        "positive_rate": 0.015013966480446927,
+        "pos_weight": 65.6046511627907
+      },
+      "License Grant": {
+        "positive_chunks": 851,
+        "positive_rate": 0.04244812450119713,
+        "pos_weight": 22.55816686251469
+      },
+      "Audit Rights": {
+        "positive_chunks": 592,
+        "positive_rate": 0.029529130087789304,
+        "pos_weight": 32.86486486486486
+      },
+      "Termination for Convenience": {
+        "positive_chunks": 302,
+        "positive_rate": 0.015063846767757383,
+        "pos_weight": 65.3841059602649
+      },
+      "Insurance": {
+        "positive_chunks": 400,
+        "positive_rate": 0.019952114924181964,
+        "pos_weight": 49.12
+      }
+    }
+  },
+  "label_cooccurrence": {
+    "Cap on Liability": {
+      "Cap on Liability": 275,
+      "Non-Compete": 80,
+      "License Grant": 182,
+      "Audit Rights": 167,
+      "Termination for Convenience": 128,
+      "Insurance": 116
+    },
+    "Non-Compete": {
+      "Cap on Liability": 80,
+      "Non-Compete": 119,
+      "License Grant": 89,
+      "Audit Rights": 77,
+      "Termination for Convenience": 50,
+      "Insurance": 54
+    },
+    "License Grant": {
+      "Cap on Liability": 182,
+      "Non-Compete": 89,
+      "License Grant": 255,
+      "Audit Rights": 149,
+      "Termination for Convenience": 103,
+      "Insurance": 106
+    },
+    "Audit Rights": {
+      "Cap on Liability": 167,
+      "Non-Compete": 77,
+      "License Grant": 149,
+      "Audit Rights": 214,
+      "Termination for Convenience": 93,
+      "Insurance": 108
+    },
+    "Termination for Convenience": {
+      "Cap on Liability": 128,
+      "Non-Compete": 50,
+      "License Grant": 103,
+      "Audit Rights": 93,
+      "Termination for Convenience": 183,
+      "Insurance": 81
+    },
+    "Insurance": {
+      "Cap on Liability": 116,
+      "Non-Compete": 54,
+      "License Grant": 106,
+      "Audit Rights": 108,
+      "Termination for Convenience": 81,
+      "Insurance": 166
+    }
+  },
+  "labels_per_document": {
+    "0": 93,
+    "1": 79,
+    "2": 109,
+    "3": 86,
+    "4": 76,
+    "5": 49,
+    "6": 18
+  },
+  "split_balance": {
+    "train": {
+      "documents": 358,
+      "label_rates": {
+        "Cap on Liability": 0.5335195530726257,
+        "Non-Compete": 0.23184357541899442,
+        "License Grant": 0.49162011173184356,
+        "Audit Rights": 0.3994413407821229,
+        "Termination for Convenience": 0.3743016759776536,
+        "Insurance": 0.3128491620111732
+      }
+    },
+    "val": {
+      "documents": 76,
+      "label_rates": {
+        "Cap on Liability": 0.5263157894736842,
+        "Non-Compete": 0.19736842105263158,
+        "License Grant": 0.47368421052631576,
+        "Audit Rights": 0.4868421052631579,
+        "Termination for Convenience": 0.2631578947368421,
+        "Insurance": 0.32894736842105265
+      }
+    },
+    "test": {
+      "documents": 76,
+      "label_rates": {
+        "Cap on Liability": 0.5789473684210527,
+        "Non-Compete": 0.27631578947368424,
+        "License Grant": 0.5657894736842105,
+        "Audit Rights": 0.4473684210526316,
+        "Termination for Convenience": 0.3815789473684211,
+        "Insurance": 0.3815789473684211
+      }
+    }
+  }
+}
