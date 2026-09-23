@@ -99,7 +99,7 @@ def render_card(summary: dict, run_dir: Path, repo_id: str | None) -> str:
         "Multi-label classifier flagging six risk-relevant clause types in commercial",
         "contracts, fine-tuned on [CUAD v1](https://www.atticusprojectai.org/cuad).",
         "",
-        "Source and training code: https://github.com/AnushreeKasturi/NNDL",
+        "Source and training code: https://github.com/ManasDasri/NNDL",
         "",
         "## Labels",
         "",

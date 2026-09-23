@@ -11,7 +11,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-REPO = "https://github.com/AnushreeKasturi/NNDL.git"
+REPO = "https://github.com/ManasDasri/NNDL.git"
 CHECKOUT = Path("nndl")
 
 if not CHECKOUT.exists():

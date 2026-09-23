@@ -20,4 +20,4 @@ commit=$(printf 'Publish the results dashboard\n\nGenerated from %s at %s.\n' \
     "$RUN_DIR" "$(date -u '+%Y-%m-%d %H:%M UTC')" | git commit-tree "$tree")
 
 git push -q "$REMOTE" "${commit}:refs/heads/gh-pages" --force
-echo "published -> https://anushreekasturi.github.io/NNDL/"
+echo "published -> https://www.algorithmicbit.tech/NNDL/"
