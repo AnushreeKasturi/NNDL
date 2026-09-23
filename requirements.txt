@@ -1,6 +1,7 @@
+# The data layer (legal-risk-prepare, tests/test_data_pipeline.py) needs none
+# of these; it is standard library only.
 torch>=2.2
 transformers>=4.44
-datasets>=2.20
-pandas>=2.2
 numpy>=1.26
-tqdm>=4.66
+scikit-learn>=1.4
+matplotlib>=3.8  # dataset report figures

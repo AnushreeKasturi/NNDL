@@ -4,24 +4,34 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "legal-risk-clause-classifier"
-version = "0.1.0"
-description = "Multi-label legal clause risk classifier for CUAD contracts"
+version = "0.2.0"
+description = "Clause-level risk detection in commercial contracts (CUAD v1)"
 readme = "README.md"
 requires-python = ">=3.10"
+# The data layer itself is standard library only: `legal-risk-prepare` and
+# tests/test_data_pipeline.py run without any of these installed.
 dependencies = [
   "torch>=2.2",
   "transformers>=4.44",
-  "datasets>=2.20",
-  "pandas>=2.2",
   "numpy>=1.26",
-  "tqdm>=4.66",
+  "scikit-learn>=1.4",
 ]
+
+[project.optional-dependencies]
+# Only the dataset report needs a plotting library.
+analysis = ["matplotlib>=3.8"]
+# The browser demo. Not needed to train, evaluate or report.
+demo = ["gradio>=4.44"]
 
 [project.scripts]
 legal-risk-prepare = "legal_risk_classifier.prepare:main"
-legal-risk-train = "legal_risk_classifier.train:main"
-legal-risk-eval = "legal_risk_classifier.evaluate:main"
-legal-risk-infer = "legal_risk_classifier.infer:main"
+legal-risk-analyze = "legal_risk_classifier.analyze:main"
+legal-risk-train-cnn = "legal_risk_classifier.train_cnn:main"
+legal-risk-train-transformer = "legal_risk_classifier.train_transformer:main"
+legal-risk-evaluate = "legal_risk_classifier.evaluate:main"
+legal-risk-compare = "legal_risk_classifier.compare:main"
+legal-risk-demo = "legal_risk_classifier.demo:main"
+legal-risk-export-dashboard = "legal_risk_classifier.export_dashboard:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
