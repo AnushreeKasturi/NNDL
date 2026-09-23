@@ -8,9 +8,13 @@ version = "0.2.0"
 description = "Clause-level risk detection in commercial contracts (CUAD v1)"
 readme = "README.md"
 requires-python = ">=3.10"
-# The data layer is standard library only, so preparing the dataset and running
-# its tests needs no install. Model dependencies arrive with the models.
-dependencies = []
+# The data layer itself is standard library only: `legal-risk-prepare` and
+# tests/test_data_pipeline.py run without any of these installed.
+dependencies = [
+  "torch>=2.2",
+  "numpy>=1.26",
+  "scikit-learn>=1.4",
+]
 
 [project.optional-dependencies]
 # Only the dataset report needs a plotting library.
@@ -19,6 +23,7 @@ analysis = ["matplotlib>=3.8"]
 [project.scripts]
 legal-risk-prepare = "legal_risk_classifier.prepare:main"
 legal-risk-analyze = "legal_risk_classifier.analyze:main"
+legal-risk-train-cnn = "legal_risk_classifier.train_cnn:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

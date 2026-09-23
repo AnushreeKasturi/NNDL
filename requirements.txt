@@ -1,3 +1,6 @@
-# Data preparation and its tests use the standard library only.
-# Model dependencies are added alongside the models.
+# The data layer (legal-risk-prepare, tests/test_data_pipeline.py) needs none
+# of these; it is standard library only.
+torch>=2.2
+numpy>=1.26
+scikit-learn>=1.4
 matplotlib>=3.8  # dataset report figures
